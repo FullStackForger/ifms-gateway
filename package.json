@@ -1,0 +1,24 @@
+{
+  "name": "ifms-pages",
+  "version": "1.0.0",
+  "description": "Seneca microservice auto-updating and serving static content",
+  "main": "index.js",
+  "dependencies": {},
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/indieforger/ifms-pages.git"
+  },
+  "keywords": [
+    "seneca",
+    "microservice"
+  ],
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/indieforger/ifms-pages/issues"
+  },
+  "homepage": "https://github.com/indieforger/ifms-pages#readme"
+}
