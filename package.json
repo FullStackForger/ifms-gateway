@@ -2,8 +2,9 @@
   "name": "ifms-pages",
   "version": "1.0.0",
   "description": "Seneca microservice auto-updating and serving static content",
-  "main": "index.js",
+  "main": "service.js",
   "dependencies": {
+    "es6-promisify": "^3.0.0",
     "node-schedule": "^0.6.0"
   },
   "devDependencies": {},
