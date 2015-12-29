@@ -28,6 +28,9 @@ sample config.json file
 
 Original `gitnode` package has been replaced with much slower, `simple-git`, 
 due to issues with cloning private repositories.
+Following [nodegit](http://radek.io/2015/10/27/nodegit/) blog post solves
+cloning issues only, fetching authentication still fails, original commit 
+is [here](https://github.com/indieforger/ifms-pages/blob/143574ae29de91ce7503e606490aef0dd770b549/service.js)
 
 Currently used `simple-git` library is a wrapper executing shell commands.
 That means git has to be configured on local box.
