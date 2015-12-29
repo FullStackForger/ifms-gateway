@@ -37,7 +37,7 @@ That means git has to be configured on local box.
 
 ## Feature list
 
-### Completed features:
+### Completed features
 - service settings stored in `config.json`
 - pages directory verification
   - create directory if one doesn't exist 
@@ -46,11 +46,16 @@ That means git has to be configured on local box.
   - fast forwarding static pages from configured repositories
 - `ignore` flag allowed for `page` config object
 
-### Pending features:
+### Planned features
 - utilise seneca framework as microservice
 - auto update page repositories in interval based on config `interval` property
 - action serving static files on request
+
+### Optional features
 - action removing all repositories from pages directory
 - action reloading config.json without app reboot
 - action providing pages update status
+- store config in database
+- add `access` flag to page config option (owner = 0, logged in = 1, guest = 2)
+- web interface (reconfiguration, reloading)
 - broadcasting update message on repository update (page.update object)
