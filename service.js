@@ -14,12 +14,6 @@ verifyPath(config)
 	.then(updateRepositories)
 	.catch((err) => { console.log(err.stack) })
 
-// todo:
-// - convert to service, to allow manual repository update
-// - allow to reload config.json without application reboot
-// - set interval for repositories update
-// - microservice: broadcast message when repositories update has completed with changes (watch page.update object)
-
 
 /**
  * Verifies the path to directory storing repositories.
