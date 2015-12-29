@@ -8,12 +8,6 @@
     "git": "https://github.com/indieforger/ifms-page-xenoempires"
   },{
     "slug": "private-ssh",
-    "git": "git@bitbucket.org:indieforger/ifms-page-private-test.git",
-    "ignore": false,
-    "comment": [
-      "Private repos can not be cloned on mack due to nodegit library limitations.",
-      "Neither https or ssh(git) protocol doesn't seem to work.",
-      "check: https://github.com/nodegit/nodegit/issues/497"
-    ]
+    "git": "git@bitbucket.org:indieforger/ifms-page-private-test.git"
   }]
 }
