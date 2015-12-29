@@ -4,7 +4,7 @@
   "description": "Seneca microservice auto-updating and serving static content",
   "main": "service.js",
   "dependencies": {
-    "es6-promisify": "^3.0.0",
+    "async": "^1.5.0",
     "simple-git": "^1.18.0"
   },
   "devDependencies": {},
