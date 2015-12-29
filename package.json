@@ -5,7 +5,7 @@
   "main": "service.js",
   "dependencies": {
     "es6-promisify": "^3.0.0",
-    "node-schedule": "^0.6.0"
+    "nodegit": "^0.6.3"
   },
   "devDependencies": {},
   "scripts": {
