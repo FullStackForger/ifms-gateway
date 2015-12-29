@@ -5,7 +5,7 @@ var
 	async = require('async'),
 	fs = require('fs'),
 	path = require('path'),
-	nodegit = require('nodegit')
+	simpleGit = require('simple-git')
 
 
 //setInterval(initCheck, 1000);
@@ -13,6 +13,13 @@ var
 verifyPath(config)
 	.then(updateRepositories)
 	.catch((err) => { console.log(err.stack) })
+
+// todo:
+// - convert to service, to allow manual repository update
+// - allow to reload config.json without application reboot
+// - set interval for repositories update
+// - microservice: broadcast message when repositories update has completed with changes (watch page.update object)
+
 
 /**
  * Verifies the path to directory storing repositories.
@@ -55,38 +62,10 @@ function verifyPath(settings) {
  * - ready = {bool}
  * - error = {null} | {string}
  *
- * Know issues:
- * nodegit is based on open-source libgit2 library (https://github.com/libgit2/libgit2)
- * which seems to have problem with working on os-x
- * todo: consider different library if there is one available
- *
  * @param settings
  * @returns {Promise}
  */
 function updateRepositories(settings) {
-	// github will fail cert check on some OSX machines - this overrides that check
-
-	// clone with https: https://github.com/nodegit/nodegit/blob/master/test/tests/clone.js#L40-L51
-	// clone with ssh: https://github.com/nodegit/nodegit/blob/master/test/tests/clone.js#L78-L92
-	let cloneOpts = {
-		fetchOpts: {
-			callbacks: {
-				certificateCheck: function() {
-					return 1
-				},
-				credentials: function(url, userName) {
-					return nodegit.Cred.sshKeyFromAgent(userName)
-				}
-			}
-		}
-	}
-
-	// source: https://github.com/nodegit/nodegit/blob/master/examples/pull.js
-	let fetchOpts = {
-		credentials: (url, userName) => { return nodegit.Cred.sshKeyFromAgent(userName) },
-		certificateCheck: function() { return 1 }
-	}
-
 	return new Promise((resolve, reject) => {
 		if (settings.pages == undefined || !settings.pages instanceof Array) {
 			reject('Bad configuration, pages property couldn\'t be found');
@@ -96,73 +75,53 @@ function updateRepositories(settings) {
 
 			return (callback) => {
 				let
-					repoPath = path.resolve(__dirname, settings.path, page.slug),
-					mapped = false,
-					repository
+					repoPath = path.resolve(__dirname, settings.path, page.slug)
 
 				function onReject(err) {
 					page.ready = false
 					page.error = err
-					mapped = true
 					callback(null, page)
 				}
 
 				function onResolve() {
 					page.ready = true
 					page.error = null
-					mapped = true
 					callback(null, page)
 				}
 
-				if (page.ignore) onReject(new Error("Repository was ignored"))
-				if (mapped) return
+				if (page.ignore) return onReject(new Error("Repository was ignored"))
 
 				// check if directory exist
 				fs.stat(repoPath, (error, stats) => {
 
 					// clone repo if directory doesn't exist
 					if (error) {
-						return nodegit
-							.Clone(page.git, repoPath, null)
-							.then(onResolve)
-							.catch(onReject)
+						return simpleGit()
+							.clone(page.git, repoPath, (err) => {
+								return err ? onReject(err) : onResolve()
+							})
 					}
 
-					if (mapped) return
 
 					// check if repo dir is writable
+					let mapped = false
 					fs.access(repoPath, fs.F_OK | fs.R_OK | fs.W_OK, (error) => {
 						if (error) {
-							return onReject(error)
+							onReject(error)
+							mapped = true
 						}
 					})
-
 					if (mapped) return
 
-					// try to fast forward (fetch and merge)
-					// nodegit, doesn't have pull implementation
-					nodegit.Repository
-						.open(repoPath)
-						.then((repo) => {
-							repository = repo;
-							return repository.fetchAll(fetchOpts);
-						})
-						.then(() => {
-							return repository.mergeBranches("master", "origin/master");
-						})
-						.then(onResolve)
-						.catch(onReject)
-
+					simpleGit(repoPath).pull((err, update) => {
+						if (err) return onReject(err)
+						page.update = update
+						onResolve()
+					})
 				})
 			}
 		}), (error, results) => {
 			console.log(settings.pages)
-			settings.pages.forEach((page) => {
-				if (page.error) {
-					//todo: log error
-					//console.log(page.slug + " repository (" + page.repo + ") error:" + err.message);
-				}
-			})
 			resolve(settings)
 		})
 	})
