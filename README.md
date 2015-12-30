@@ -2,39 +2,6 @@
 
 Seneca microservice auto-updating and serving static pages content
   
-## Configuration
-
-sample config.json file
-```
-{
-  "path": "./pages",
-  "pages": [{
-    "slug": "jewelines",
-    "git": "https://github.com/indieforger/ifms-page-jewelines"
-  },{
-    "slug": "private-ssh",
-    "git": "git@bitbucket.org:indieforger/ifms-page-private-test.git",
-    "ignore": true,
-    "comment": [
-      "Private repos can not be cloned on mack due to nodegit library limitations.",
-      "Neither https or ssh(git) protocol doesn't seem to work.",
-      "check: https://github.com/nodegit/nodegit/issues/497"
-    ]
-  }]
-}
-```
-
-## Notes
-
-Original `gitnode` package has been replaced with much slower, `simple-git`, 
-due to issues with cloning private repositories.
-Following [nodegit](http://radek.io/2015/10/27/nodegit/) blog post solves
-cloning issues only, fetching authentication still fails, original commit 
-is [here](https://github.com/indieforger/ifms-pages/blob/143574ae29de91ce7503e606490aef0dd770b549/service.js)
-
-Currently used `simple-git` library is a wrapper executing shell commands.
-That means git has to be configured on local box.
-
 ## Feature list
 
 ### Completed features
