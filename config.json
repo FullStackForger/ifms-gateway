@@ -1,10 +1,10 @@
 {
   "path": "./pages",
   "repos": [{
-    "dir": "jewelines",
+    "dir": "games/jewelines",
     "git": "https://github.com/indieforger/ifms-page-jewelines"
   },{
-    "dir": "xenoempires",
+    "dir": "games/xenoempires",
     "git": "https://github.com/indieforger/ifms-page-xenoempires"
   },{
     "dir": "private-ssh",

@@ -4,7 +4,8 @@
   "description": "Seneca microservice auto-updating and serving static content",
   "main": "service.js",
   "dependencies": {
-    "repomine": "^1.0.*"
+    "repomine": "^1.0.*",
+    "seneca": "^0.9.3"
   },
   "devDependencies": {},
   "scripts": {
