@@ -1,23 +1,62 @@
 'use strict';
 var
-	//helpers = require('./lib/helpers.js'),
 	config = require('./config.json'),
 	repomine = require('repomine'),
-	seneca = require('seneca')();
+	path = require('path'),
+	fs = require('fs'),
+	seneca = require('seneca')(),
+	refreshRate = config.refresh * 60 * 1000,
+	internal = {};
 
-//setInterval(initCheck, 1000);
+seneca.add('aspect:content,cmd:find', function findContent(msg, next) {
+	let filePath = path.resolve(process.cwd(), config.path, msg.uri)
 
-repomine
-	.update(config)
-	.then((output) => {
-		console.log(output)
+	fs.stat(filePath, (err, stats) => {
+		if (err == null && (stats.isDirectory() || stats.isFile())) {
+			return next(null, {
+				uri: msg.uri,
+				path: filePath,
+				type: stats.isDirectory() ? 'directory' : 'file'
+			})
+		}
 	})
-	.catch((err) => { console.log(err.stack) })
+}).listen({pin:'aspect:content,cmd:find'})
+
+internal.updatePages = function (cb) {
+	let updateTime = Date.now();
+	repomine.update({
+		path: config.path,
+		repos: config.pages.map((page) => {
+			return {
+				dir: page.slug,
+				git: page.git
+			}
+		})
+	}).then((data) => {
+		data.updateTime = Date.now() - updateTime
+		if (cb instanceof Function) cb()
+
+		// todo: store success logs
+		//console.log(data)
+	}, (err) => {
+		// todo: store success err
+		//console.log(err)
+	})
+}
+
+internal.testAction = function () {
+	seneca.act('aspect:content,cmd:find', {
+		uri: 'games/jewelines/'
+	}, function (err, data) {
+		if (err) return console.log("error response:\n", err)
+		console.log("data response:\n", data)
+	})
+}
 
 
-seneca.add({act: 'content', cmd: 'get'}, function (msg, next) {
-	// /games/jewelines/index.html
-
-	msg.uri = '';
-	next();
+internal.updatePages(() => {
+	setInterval(internal.updatePages, refreshRate)
+	internal.testAction()
 })
+
+

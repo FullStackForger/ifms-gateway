@@ -45,9 +45,9 @@ That means git has to be configured on local box.
   - cloning static pages from configured repositories
   - fast forwarding static pages from configured repositories
 - `ignore` flag allowed for `page` config object
+- utilise seneca framework as microservice
 
 ### Planned features
-- utilise seneca framework as microservice
 - auto update page repositories in interval based on config `interval` property
 - action serving static files on request
 
