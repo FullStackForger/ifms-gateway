@@ -1,4 +1,4 @@
-# ifms-pages
+# IFMS Portal 
 
 Seneca microservice auto-updating and serving static pages content
   
