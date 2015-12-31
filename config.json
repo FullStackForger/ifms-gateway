@@ -1,15 +1,15 @@
 {
   "path": "./pages",
-  "pages": [{
-    "slug": "games/jewelines",
+  "repos": [{
+    "dir": "games/jewelines",
     "git": "https://github.com/indieforger/page-jewelines"
   },{
-    "slug": "games/xenoempires",
+    "dir": "games/xenoempires",
     "git": "https://github.com/indieforger/page-xenoempires"
   },{
-    "slug": "private-ssh",
+    "dir": "private-ssh",
     "git": "git@bitbucket.org:indieforger/ifms-page-private-test.git",
     "ignore": true
   }],
-  "refresh": 1
+  "refresh": 10
 }
