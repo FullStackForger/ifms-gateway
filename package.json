@@ -1,7 +1,7 @@
 {
-  "name": "ifms-pages",
+  "name": "ifms-gateway",
   "version": "1.0.0",
-  "description": "Seneca microservice auto-updating and serving static content",
+  "description": "Webserver and seneca microservice auto-updating and serving static content",
   "main": "service.js",
   "dependencies": {
     "repomine": "^1.0.4",
