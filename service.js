@@ -2,16 +2,15 @@
 var
 	config = require('./config.json'),
 	seneca = require('seneca'),
-	portal = require('./lib/portal'),
-	updateRefresh = config.refresh * 60 * 1000,
+	warpgate = require('./lib'),
+	frequency = config.refresh * 60 * 1000,
 	serviceSpec = { pin:'aspect:content', type: 'tcp' },
-	updateOpts = { path: config.path, repos: config.repos, spec: serviceSpec}
+	warpOpts = { path: config.path, repos: config.repos, spec: serviceSpec}
 
 seneca
-	.use(portal.plugin, {path: config.path})
+	.use(warpgate.plugin, { path: config.path })
 	.listen(serviceSpec)
 
-portal
-	.updateContent(updateOpts)
-	.then(() => setInterval(() => portal.updateContent(updateOpts), updateRefresh))
-
+warpgate
+	.warp(warpOpts)
+	.then(() => setInterval(() => gateway.warp(warpOpts), frequency))
